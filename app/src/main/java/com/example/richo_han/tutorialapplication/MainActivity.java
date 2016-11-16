@@ -91,6 +91,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         showStateToast("In onRestoreInstanceState state!");
     }
 
+    /**
+     * Show toast that describe the current state in the app's life cycle.
+     * @param text
+     */
     private void showStateToast(CharSequence text) {
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
@@ -99,6 +103,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         toast.show();
     }
 
+    /**
+     * Save user's selection on gender.
+     * @param view
+     */
     public void onGenderButtonClicked(View view) {
         switch (view.getId()){
             case R.id.radio_male:
@@ -110,6 +118,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    /**
+     * Start another activity to show the preview of user's form registration.
+     * Will alert if user did not complete form.
+     * @param view
+     */
     public void previewForm(View view) {
         if(!isFormCompleted()) {
             AlertDialogFragment newFragment = new AlertDialogFragment();
@@ -130,6 +143,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    /**
+     * Check if the form is completed.
+     * @return
+     */
     private boolean isFormCompleted() {
         EditText editName = (EditText) findViewById(R.id.edit_name);
         EditText editAccount = (EditText) findViewById(R.id.edit_account);
@@ -145,6 +162,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         domain = adapterView.getItemAtPosition(i).toString();
     }
 
+    /* Callback method to be invoked when the selection disappears
+     * from this view.The selection can disappear for instance when
+     * touch is activated or when the adapter becomes empty. */
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {}
 }
