@@ -27,9 +27,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
         setTitle("Form");
 
-        if(savedInstanceState!=null)
-            Log.d("State", "savedInstanceState not null!");
-
         Spinner spinner = (Spinner) findViewById(R.id.domain_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.domain_array, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -91,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onRestoreInstanceState(Bundle onState) {
         super.onRestoreInstanceState(onState);
-        Log.d("State", "onState == null: " + String.valueOf((onState==null)));
         showStateToast("In onRestoreInstanceState state!");
     }
 
@@ -99,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
-        Log.d("State", text.toString());
+        Log.i("State", text.toString());
         toast.show();
     }
 
