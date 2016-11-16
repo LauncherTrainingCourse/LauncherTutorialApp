@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Tutorial Application</string>
+    <string name="edit_name">Enter your name</string>
+    <string name="button_send">Send</string>
+    <string name="button_preview">Preview</string>
+    <string name="edit_account">Account</string>
+    <string-array name="domain_array">
+        <item>gmail.com</item>
+        <item>hotmail.com</item>
+        <item>yahoo.com.tw</item>
+    </string-array>
+</resources>
