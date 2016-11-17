@@ -2,6 +2,7 @@ package com.example.richo_han.tutorialapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -37,75 +38,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-
-        showStateToast("In onCreate state!");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        showStateToast("In onStart state!");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        showStateToast("In onResume state!");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        showStateToast("In onPause state!");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        showStateToast("In onStop state!");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        showStateToast("In onDestroy state!");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
-        showStateToast("In onRestart state!");
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle onState) {
-        super.onSaveInstanceState(onState);
-
-        showStateToast("In onSaveInstanceState state!");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle onState) {
-        super.onRestoreInstanceState(onState);
-        showStateToast("In onRestoreInstanceState state!");
-    }
-
-    /**
-     * Show toast that describe the current state in the app's life cycle.
-     * @param text
-     */
-    private void showStateToast(CharSequence text) {
-        Context context = getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);
-        Log.i("State", text.toString());
-        toast.show();
     }
 
     /**
