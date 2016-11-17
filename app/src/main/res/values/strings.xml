@@ -4,6 +4,8 @@
     <string name="button_send">Send</string>
     <string name="button_preview">Preview</string>
     <string name="edit_account">Account</string>
+    <string name="action_favorite">Favorite</string>
+    <string name="action_settings">Settings</string>
     <string-array name="domain_array">
         <item>gmail.com</item>
         <item>hotmail.com</item>
