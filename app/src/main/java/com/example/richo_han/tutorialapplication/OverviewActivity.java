@@ -22,10 +22,13 @@ public class OverviewActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.overview_toolbar);
         setSupportActionBar(toolbar);
 
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
-        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
-        tabs.setupWithViewPager(pager);
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+         ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
+         pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
+
+        // Give the TabLayout the ViewPager
+         TabLayout tabs = (TabLayout) findViewById(R.id.sliding_tabs);
+         tabs.setupWithViewPager(pager);
     }
 
     @Override

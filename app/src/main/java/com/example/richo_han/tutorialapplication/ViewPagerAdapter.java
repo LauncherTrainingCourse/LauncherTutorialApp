@@ -5,29 +5,30 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 /**
- * Created by Richo_Han on 2016/11/17.
+ * Created by Richo_Han on 2016/11/18.
  */
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
-
-    private final String[] tabTitles = {"Contact", "Message", "Group"};
+    final int PAGE_COUNT = 3;
+    private String tabTitles[] = new String[] { "Contact", "Message", "Group" };
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return tabTitles[position];
+    public int getCount() {
+        return PAGE_COUNT;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return TabFragment.newInstance(position);
+        return PageFragment.newInstance(position + 1);
     }
 
     @Override
-    public int getCount() {
-        return tabTitles.length;
+    public CharSequence getPageTitle(int position) {
+        // Generate title based on item position
+        return tabTitles[position];
     }
 }

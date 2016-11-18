@@ -1,15 +1,6 @@
 <resources>
     <string name="app_name">Tutorial Application</string>
     <string name="sign_in">Sign In</string>
-    <string name="edit_name">Enter your name</string>
-    <string name="button_send">Send</string>
-    <string name="button_preview">Preview</string>
-    <string name="edit_account">Account</string>
     <string name="action_favorite">Favorite</string>
     <string name="action_settings">Settings</string>
-    <string-array name="domain_array">
-        <item>gmail.com</item>
-        <item>hotmail.com</item>
-        <item>yahoo.com.tw</item>
-    </string-array>
 </resources>
