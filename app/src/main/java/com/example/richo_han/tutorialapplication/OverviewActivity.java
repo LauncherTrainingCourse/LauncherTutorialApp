@@ -24,7 +24,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
          ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
-         pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
+         pager.setAdapter(new ViewPagerAdapter(OverviewActivity.this, getSupportFragmentManager()));
 
         // Give the TabLayout the ViewPager
          TabLayout tabs = (TabLayout) findViewById(R.id.sliding_tabs);
