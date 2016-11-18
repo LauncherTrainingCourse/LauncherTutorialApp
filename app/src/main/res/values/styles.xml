@@ -9,7 +9,6 @@
     </style>
 
     <style name="OverviewCustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">#e1ee0000</item>
         <item name="tabTextAppearance">@style/OverviewCustomTextAppearance</item>
     </style>
     

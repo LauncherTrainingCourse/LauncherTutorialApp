@@ -31,13 +31,20 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public int getCount() {
-        return PAGE_COUNT;
-    }
+    public int getCount() { return PAGE_COUNT; }
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.newInstance(position + 1);
+        switch (position){
+            case 0:
+                return new ContactPageFragment();
+            case 1:
+                return new MessagePageFragment();
+            case 2:
+                return new GroupPageFragment();
+            default:
+                return PageFragment.newInstance(position + 1);
+        }
     }
 
     @Override
@@ -48,6 +55,5 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
         sb.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
-        // return tabTitles[position];
     }
 }
