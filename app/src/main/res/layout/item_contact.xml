@@ -1,9 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView android:id="@+id/contact_name"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/contact_img"
+        android:layout_width="150px"
+        android:layout_height="150px"
+        android:padding="15px"
+        android:src="@drawable/ic_account_circle_black_48px" />
+
+    <TextView
+        android:id="@+id/contact_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"/>
-</LinearLayout>
+        android:layout_toLeftOf="@+id/call_btn"
+        android:layout_toRightOf="@id/contact_img"
+        android:paddingLeft="50px"
+        android:textColor="@color/contactName"
+        android:textSize="26dp" />
+
+    <TextView
+        android:id="@+id/contact_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact_name"
+        android:layout_toLeftOf="@id/call_btn"
+        android:layout_toRightOf="@id/contact_img"
+        android:paddingLeft="50px"
+        android:text="+1234567890" />
+
+    <LinearLayout
+        android:id="@+id/call_btn"
+        android:layout_width="100px"
+        android:layout_height="150px"
+        android:layout_alignParentRight="true"
+        android:gravity="center">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="100px"
+            android:background="#00000000"
+            android:src="@drawable/ic_call_black_48px" />
+    </LinearLayout>
+</RelativeLayout>
