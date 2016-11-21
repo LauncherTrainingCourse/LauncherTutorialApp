@@ -21,7 +21,7 @@ public class MessagePageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_page, container, false);
         TextView textView = (TextView) view;
-        textView.setText("Nessage Page");
+        textView.setText("Message Page");
         return view;
     }
 
