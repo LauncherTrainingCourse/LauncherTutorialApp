@@ -22,11 +22,10 @@
         android:textSize="24dp" />
 
     <TextView
-        android:id="@+id/contact_number"
+        android:id="@+id/contact_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/contact_name"
         android:layout_toRightOf="@id/contact_img"
-        android:paddingLeft="30dp"
-        android:text="+1234567890" />
+        android:paddingLeft="30dp" />
 </RelativeLayout>

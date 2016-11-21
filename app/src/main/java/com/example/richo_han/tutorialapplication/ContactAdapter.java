@@ -28,7 +28,9 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         }
 
         TextView tvName = (TextView) convertView.findViewById(R.id.contact_name);
+        TextView tvPhone = (TextView) convertView.findViewById(R.id.contact_phone);
         tvName.setText(contact.name);
+        tvPhone.setText(contact.phone);
 
         return convertView;
     }
