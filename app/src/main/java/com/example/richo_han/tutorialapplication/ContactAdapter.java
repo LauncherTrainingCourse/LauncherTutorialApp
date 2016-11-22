@@ -1,6 +1,7 @@
 package com.example.richo_han.tutorialapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,12 @@ import java.util.ArrayList;
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
     public final static String TAG = ContactAdapter.class.getSimpleName();
+    public Context context;
     public ArrayList<Contact> contacts;
 
     public ContactAdapter(Context context, ArrayList<Contact> contacts) {
         super(context, 0, contacts);
+        this.context = context;
         this.contacts = contacts;
     }
 
@@ -40,7 +43,8 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "" + position);
+                Intent intent = new Intent(context, ContactInfoActivity.class);
+                context.startActivity(intent);
             }
         });
 
