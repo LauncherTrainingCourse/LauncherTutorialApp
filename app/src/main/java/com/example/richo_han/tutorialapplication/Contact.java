@@ -9,15 +9,14 @@ import android.util.Log;
  */
 
 public class Contact implements Parcelable{
-    public String name;
-    public String phone;
-    public String gender;
+    public String name, phone, gender, company, email;
 
-    public Contact(String name, String phone, String gender){
+    public Contact(String name, String phone, String gender, String company, String email){
         this.name = name;
         this.phone = phone;
         this.gender = gender;
-        Log.d("Contact", gender);
+        this.company = company;
+        this.email = email;
     }
 
     @Override
@@ -30,6 +29,8 @@ public class Contact implements Parcelable{
         out.writeString(this.name);
         out.writeString(this.phone);
         out.writeString(this.gender);
+        out.writeString(this.company);
+        out.writeString(this.email);
     }
 
     public static final Parcelable.Creator<Contact> CREATOR
@@ -50,5 +51,7 @@ public class Contact implements Parcelable{
         this.name = in.readString();
         this.phone = in.readString();
         this.gender = in.readString();
+        this.company = in.readString();
+        this.email = in.readString();
     }
 }

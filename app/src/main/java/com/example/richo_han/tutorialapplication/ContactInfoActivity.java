@@ -19,6 +19,8 @@ public class ContactInfoActivity extends AppCompatActivity {
         ImageView ivPhoto = (ImageView) findViewById(R.id.contact_info_photo);
         TextView tvName = (TextView) findViewById(R.id.contact_info_name);
         TextView tvPhone = (TextView) findViewById(R.id.contact_info_phone);
+        TextView tvCompany= (TextView) findViewById(R.id.contact_info_company);
+        TextView tvEmail = (TextView) findViewById(R.id.contact_info_email);
 
         if("male".equals(contact.gender)) {
             ivPhoto.setImageResource(R.drawable.steve);
@@ -27,5 +29,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         }
         tvName.setText(contact.name);
         tvPhone.setText(contact.phone);
+        tvCompany.setText(contact.company);
+        tvEmail.setText(contact.email);
     }
 }
