@@ -10,10 +10,12 @@ import android.os.Parcelable;
 public class Contact implements Parcelable{
     public String name;
     public String phone;
+    public String gender;
 
-    public Contact(String name, String phone){
+    public Contact(String name, String phone, String gender){
         this.name = name;
         this.phone = phone;
+        this.gender = gender;
     }
 
     @Override
