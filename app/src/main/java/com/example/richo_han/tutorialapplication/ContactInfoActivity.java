@@ -13,8 +13,8 @@ public class ContactInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact_info);
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra(ContactAdapter.EXTRA_CONTACT);
+        Contact contact = intent.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
         TextView tvName = (TextView) findViewById(R.id.contact_info_name);
-        tvName.setText(name);
+        tvName.setText(contact.name);
     }
 }

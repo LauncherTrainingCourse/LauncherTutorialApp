@@ -45,7 +45,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ContactInfoActivity.class);
-                intent.putExtra(EXTRA_CONTACT, contact.name);
+                intent.putExtra(EXTRA_CONTACT, contact);
                 context.startActivity(intent);
             }
         });
