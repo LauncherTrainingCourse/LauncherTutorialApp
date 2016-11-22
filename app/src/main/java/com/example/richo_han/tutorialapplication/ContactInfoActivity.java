@@ -20,7 +20,11 @@ public class ContactInfoActivity extends AppCompatActivity {
         TextView tvName = (TextView) findViewById(R.id.contact_info_name);
         TextView tvPhone = (TextView) findViewById(R.id.contact_info_phone);
 
-        ivPhoto.setImageResource(R.drawable.steve);
+        if("male".equals(contact.gender)) {
+            ivPhoto.setImageResource(R.drawable.steve);
+        } else {
+            ivPhoto.setImageResource(R.drawable.kristy);
+        }
         tvName.setText(contact.name);
         tvPhone.setText(contact.phone);
     }

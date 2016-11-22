@@ -32,7 +32,8 @@ public class ContactPageFragment extends Fragment {
             for (int i=0; i<contacts.length(); i++){
                 JSONObject contact = contacts.getJSONObject(i);
                 contactAdapter.add(new Contact(contact.getString("name"),
-                        contact.getString("phone")));
+                        contact.getString("phone"),
+                        contact.getString("gender")));
             }
         } catch (Exception e){
             e.printStackTrace();
