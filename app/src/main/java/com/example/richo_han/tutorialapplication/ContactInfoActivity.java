@@ -4,10 +4,15 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ContactInfoActivity extends AppCompatActivity {
+    public final static String TAG = ContactInfoActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +40,26 @@ public class ContactInfoActivity extends AppCompatActivity {
         tvPhone.setText(contact.phone);
         tvCompany.setText(contact.company);
         tvEmail.setText(contact.email);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_contact_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_favorite:
+                Log.i(TAG, "Favorite button pushed.");
+                return true;
+            case R.id.action_settings:
+                Log.i(TAG, "Settings button pushed.");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
