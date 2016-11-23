@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tutorial Application</string>
+    <string name="app_name">Contacts</string>
     <string name="sign_in">Sign In</string>
     <string name="action_favorite">Favorite</string>
     <string name="action_settings">Settings</string>
