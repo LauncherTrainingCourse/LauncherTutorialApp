@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -16,9 +17,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ContactPageFragment extends Fragment {
-    public final static String TAG = ContactPageFragment.class.getSimpleName();
-    public static final String ARG_PAGE = "ARG_PAGE";
     public ContactAdapter contactAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -26,7 +26,10 @@ public class ContactPageFragment extends Fragment {
         ArrayList<Contact> arrayOfContacts = new ArrayList<Contact>();
         contactAdapter = new ContactAdapter(this.getContext(), arrayOfContacts);
 
-        // Deal with data binding here.
+        /*
+        Deal with data binding here.
+        Read json file from asset and create Contact instances for simulation.
+         */
         try {
             JSONArray contacts = new JSONArray(loadJSONFromAssets());
             for (int i=0; i<contacts.length(); i++){
@@ -37,11 +40,18 @@ public class ContactPageFragment extends Fragment {
                         contact.getString("company"),
                         contact.getString("email")));
             }
-        } catch (Exception e){
+        } catch (JSONException e){
             e.printStackTrace();
         }
     }
 
+    /***
+     * Generate ListView instance and link it to the data source.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the View instance containing ListVIew instance.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,6 +62,10 @@ public class ContactPageFragment extends Fragment {
         return view;
     }
 
+    /***
+     * Used to read json file from asset directory.
+     * @return json string
+     */
     public String loadJSONFromAssets() {
         String json = null;
         try {

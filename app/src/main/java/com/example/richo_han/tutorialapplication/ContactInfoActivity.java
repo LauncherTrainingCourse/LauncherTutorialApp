@@ -39,6 +39,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         } else {
             ivPhoto.setImageResource(R.drawable.kristy);
         }
+
         tvName.setText(contact.name);
         tvPhone.setText(contact.phone);
         tvCompany.setText(contact.company);

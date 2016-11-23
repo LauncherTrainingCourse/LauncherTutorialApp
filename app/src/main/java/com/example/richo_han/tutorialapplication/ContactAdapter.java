@@ -2,7 +2,6 @@ package com.example.richo_han.tutorialapplication;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
  */
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
-    public final static String TAG = ContactAdapter.class.getSimpleName();
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     public Context context;
     public ArrayList<Contact> contacts;
@@ -27,6 +25,13 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         this.contacts = contacts;
     }
 
+    /***
+     * For each contact in the data source, generate a view that contains it basic information.
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return the view generated with onClick event listener.
+     */
     @Override
     public View getView(final int position, View convertView, ViewGroup parent){
         final Contact contact = getItem(position);
@@ -41,6 +46,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         tvName.setText(contact.name);
         tvPhone.setText(contact.phone);
 
+        // Start the activity that shows the information of the selected contact.
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

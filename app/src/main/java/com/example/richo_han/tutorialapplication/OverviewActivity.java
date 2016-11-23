@@ -23,14 +23,19 @@ public class OverviewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-         ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
-         pager.setAdapter(new ViewPagerAdapter(OverviewActivity.this, getSupportFragmentManager()));
+        ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
+        pager.setAdapter(new ViewPagerAdapter(OverviewActivity.this, getSupportFragmentManager()));
 
         // Give the TabLayout the ViewPager
-         TabLayout tabs = (TabLayout) findViewById(R.id.sliding_tabs);
-         tabs.setupWithViewPager(pager);
+        TabLayout tabs = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabs.setupWithViewPager(pager);
     }
 
+    /***
+     * Used to bind the corresponding menu resource to current activity.
+     * @param menu
+     * @return true if successfully executed.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -38,6 +43,11 @@ public class OverviewActivity extends AppCompatActivity {
         return true;
     }
 
+    /***
+     * Execute corresponding actions based on button user pushed.
+     * @param item
+     * @return true if successfully executed.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

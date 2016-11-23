@@ -12,6 +12,10 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
     }
 
+    /***
+     * Used to enter Overview activity after logged in.
+     * @param view
+     */
     public void startOverview(View view) {
         Intent intent = new Intent(this, OverviewActivity.class);
         startActivity(intent);

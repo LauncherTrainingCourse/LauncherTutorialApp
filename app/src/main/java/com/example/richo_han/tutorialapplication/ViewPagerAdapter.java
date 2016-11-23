@@ -33,6 +33,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() { return PAGE_COUNT; }
 
+    /***
+     * Used to return page fragment based on the current tab.
+     * @param position
+     * @return the corresponding page fragment instance.
+     */
     @Override
     public Fragment getItem(int position) {
         switch (position){
@@ -43,10 +48,15 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 return new GroupPageFragment();
             default:
-                return PageFragment.newInstance(position + 1);
+                return null;
         }
     }
 
+    /***
+     * Used to generate tab with icons and titles.
+     * @param position
+     * @return String with icon and title.
+     */
     @Override
     public CharSequence getPageTitle(int position) {
         Drawable image = ContextCompat.getDrawable(this.mContext, imageResId[position]);

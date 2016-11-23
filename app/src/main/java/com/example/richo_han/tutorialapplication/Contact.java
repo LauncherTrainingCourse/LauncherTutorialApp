@@ -2,10 +2,11 @@ package com.example.richo_han.tutorialapplication;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 /**
- * Created by Richo_Han on 2016/11/18.
+ * This class stores detailed information of a contact.
+ * Parcelable is implemented for data serialization.
+ * Make it more easier to pass the created instance to between fragment and activities using intent.
  */
 
 public class Contact implements Parcelable{
