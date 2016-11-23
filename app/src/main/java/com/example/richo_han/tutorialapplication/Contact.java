@@ -10,6 +10,7 @@ import android.util.Log;
 
 public class Contact implements Parcelable{
     public String name, phone, gender, company, email;
+    private boolean isFavorite = false;
 
     public Contact(String name, String phone, String gender, String company, String email){
         this.name = name;
@@ -17,6 +18,14 @@ public class Contact implements Parcelable{
         this.gender = gender;
         this.company = company;
         this.email = email;
+    }
+
+    public void setFavorite(boolean b){
+        this.isFavorite = b;
+    }
+
+    public boolean getFavorite(){
+        return this.isFavorite;
     }
 
     @Override
@@ -31,6 +40,7 @@ public class Contact implements Parcelable{
         out.writeString(this.gender);
         out.writeString(this.company);
         out.writeString(this.email);
+        out.writeByte((byte) (isFavorite ? 1 : 0)); // if isFavorite == true, byte == 1
     }
 
     public static final Parcelable.Creator<Contact> CREATOR
@@ -53,5 +63,6 @@ public class Contact implements Parcelable{
         this.gender = in.readString();
         this.company = in.readString();
         this.email = in.readString();
+        this.isFavorite = in.readByte() != 0; // isFavorite == true if byte != 0
     }
 }

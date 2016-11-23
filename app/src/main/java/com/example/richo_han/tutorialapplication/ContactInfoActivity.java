@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 public class ContactInfoActivity extends AppCompatActivity {
     public final static String TAG = ContactInfoActivity.class.getSimpleName();
-
+    public Contact contact;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +23,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        Contact contact = intent.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
+        contact = intent.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
 
         ImageView ivPhoto = (ImageView) findViewById(R.id.contact_info_photo);
         TextView tvName = (TextView) findViewById(R.id.contact_info_name);
@@ -53,7 +53,13 @@ public class ContactInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_favorite:
-                Log.i(TAG, "Favorite button pushed.");
+                if(!contact.getFavorite()) {
+                    item.setIcon(R.drawable.ic_favorite_black_48dp);
+                    contact.setFavorite(true);
+                } else {
+                    item.setIcon(R.drawable.ic_favorite_border_black_48px);
+                    contact.setFavorite(false);
+                }
                 return true;
             case R.id.action_settings:
                 Log.i(TAG, "Settings button pushed.");
