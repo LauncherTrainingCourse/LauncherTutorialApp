@@ -3,6 +3,7 @@ package com.example.richo_han.tutorialapplication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +13,9 @@ public class ContactInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_info);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.contact_info_toolbar);
+        setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         Contact contact = intent.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
