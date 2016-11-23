@@ -16,7 +16,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".OverviewActivity" />
-        <activity android:name=".ContactInfoActivity"></activity>
+        <activity
+            android:name=".ContactInfoActivity"
+            android:label="Contacts"
+            android:parentActivityName=".OverviewActivity"/>
     </application>
 
 </manifest>
