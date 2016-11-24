@@ -1,6 +1,7 @@
 package com.example.richo_han.tutorialapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +15,28 @@ import java.util.ArrayList;
  */
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
+    public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
+    public Context context;
+    public ArrayList<Contact> contacts;
 
     public ContactAdapter(Context context, ArrayList<Contact> contacts) {
         super(context, 0, contacts);
+        this.context = context;
+        this.contacts = contacts;
     }
 
+    /***
+     * For each contact in the data source, generate a view that contains it basic information.
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return the view generated with onClick event listener.
+     */
     @Override
-    public View getView(int position, View convertView,ViewGroup parent){
-        Contact contact = getItem(position);
+    public View getView(final int position, View convertView, ViewGroup parent){
+        final Contact contact = getItem(position);
 
+        // What does convertView do?
         if(convertView==null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_contact, parent, false);
         }
@@ -31,6 +45,16 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         TextView tvPhone = (TextView) convertView.findViewById(R.id.contact_phone);
         tvName.setText(contact.name);
         tvPhone.setText(contact.phone);
+
+        // Start the activity that shows the information of the selected contact.
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ContactInfoActivity.class);
+                intent.putExtra(EXTRA_CONTACT, contact);
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }
