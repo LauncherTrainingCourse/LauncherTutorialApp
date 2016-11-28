@@ -15,6 +15,7 @@ import android.widget.TextView;
 public class ContactInfoActivity extends AppCompatActivity {
     public final static String TAG = ContactInfoActivity.class.getSimpleName();
     public Contact contact;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -71,6 +71,10 @@ public class ContactPageFragment extends Fragment {
         if(view.findViewById(R.id.info_container) != null) {
             FragmentActivity fragmentActivity = this.getActivity();
             ContactInfoFragment contactInfoFragment = new ContactInfoFragment();
+//            Bundle bundle = new Bundle();
+//            bundle.putParcelable(EXTRA_CONTACT, contactAdapter.getItem(0));
+//            contactInfoFragment.setArguments(bundle);
+            fragmentActivity.getIntent().putExtra(EXTRA_CONTACT, contactAdapter.getItem(0));
             contactInfoFragment.setArguments(fragmentActivity.getIntent().getExtras());
             fragmentActivity.getSupportFragmentManager()
                     .beginTransaction()
