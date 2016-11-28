@@ -1,11 +1,17 @@
 package com.example.richo_han.tutorialapplication;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -17,6 +23,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ContactPageFragment extends Fragment {
+    public final static String TAG = ContactPageFragment.class.getSimpleName();
+    public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     public ContactAdapter contactAdapter;
 
     @Override
@@ -59,6 +67,34 @@ public class ContactPageFragment extends Fragment {
 
         ListView listView = (ListView) view.findViewById(R.id.lv_contact);
         listView.setAdapter(contactAdapter);
+
+        if(view.findViewById(R.id.info_container) != null) {
+            FragmentActivity fragmentActivity = this.getActivity();
+            ContactInfoFragment contactInfoFragment = new ContactInfoFragment();
+            contactInfoFragment.setArguments(fragmentActivity.getIntent().getExtras());
+            fragmentActivity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.info_container, contactInfoFragment)
+                    .commit();
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Log.i(TAG, "In landscape mode!");
+                }
+            });
+        } else {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Context context = getContext();
+                    Intent intent = new Intent(context, ContactInfoActivity.class);
+                    intent.putExtra(EXTRA_CONTACT, (Contact) adapterView.getItemAtPosition(i));
+                    context.startActivity(intent);
+                }
+            });
+        }
+
         return view;
     }
 
