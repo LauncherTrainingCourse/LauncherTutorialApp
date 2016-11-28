@@ -20,7 +20,9 @@
         style="@style/OverviewCustomTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabMaxWidth="0dp"
         app:tabMode="fixed"
+        app:tabGravity="fill"
         android:background="@android:color/holo_blue_bright" />
 
     <android.support.v4.view.ViewPager
