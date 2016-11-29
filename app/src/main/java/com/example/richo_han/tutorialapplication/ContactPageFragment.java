@@ -1,13 +1,12 @@
 package com.example.richo_han.tutorialapplication;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,22 +68,17 @@ public class ContactPageFragment extends Fragment {
         listView.setAdapter(contactAdapter);
 
         if(view.findViewById(R.id.info_container) != null) {
-            FragmentActivity fragmentActivity = this.getActivity();
-            ContactInfoFragment contactInfoFragment = new ContactInfoFragment();
-//            Bundle bundle = new Bundle();
-//            bundle.putParcelable(EXTRA_CONTACT, contactAdapter.getItem(0));
-//            contactInfoFragment.setArguments(bundle);
-            fragmentActivity.getIntent().putExtra(EXTRA_CONTACT, contactAdapter.getItem(0));
-            contactInfoFragment.setArguments(fragmentActivity.getIntent().getExtras());
-            fragmentActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.info_container, contactInfoFragment)
-                    .commit();
+            final FragmentActivity fragmentActivity = this.getActivity();
+            final FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
+
+            if(fragmentManager.findFragmentById(R.id.info_container) == null) {
+                showContactInfo(fragmentActivity, fragmentManager, contactAdapter.getItem(0));
+            }
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Log.i(TAG, "In landscape mode!");
+                    switchContactInfo(fragmentActivity, fragmentManager, (Contact) adapterView.getItemAtPosition(i));
                 }
             });
         } else {
@@ -119,6 +113,38 @@ public class ContactPageFragment extends Fragment {
             e.printStackTrace();
         }
         return json;
+    }
+
+    /**
+     * Add contact info to the FrameLayout.
+     * @param activity
+     * @param manager
+     * @param contact
+     */
+    private void showContactInfo(FragmentActivity activity, FragmentManager manager, Contact contact){
+        ContactInfoFragment contactInfoFragment = new ContactInfoFragment();
+        activity.getIntent().putExtra(EXTRA_CONTACT, contact);
+        contactInfoFragment.setArguments(activity.getIntent().getExtras());
+
+        manager.beginTransaction()
+                .add(R.id.info_container, contactInfoFragment)
+                .commit();
+    }
+
+    /**
+     * Replace contact info with the existing one in the FrameLayout.
+     * @param activity
+     * @param manager
+     * @param contact
+     */
+    private void switchContactInfo(FragmentActivity activity, FragmentManager manager, Contact contact){
+        ContactInfoFragment contactInfoFragment = new ContactInfoFragment();
+        activity.getIntent().putExtra(EXTRA_CONTACT, contact);
+        contactInfoFragment.setArguments(activity.getIntent().getExtras());
+
+        manager.beginTransaction()
+                .replace(R.id.info_container, contactInfoFragment)
+                .commit();
     }
 
 }
