@@ -15,43 +15,8 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <ImageView
-        android:id="@+id/contact_info_photo"
+    <FrameLayout
+        android:id="@+id/info_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY" />
-
-    <TextView
-        android:id="@+id/contact_info_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingTop="15dp"
-        android:textColor="@color/contactName"
-        android:textSize="30dp" />
-
-    <TextView
-        android:id="@+id/contact_info_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingTop="15dp"
-        android:textSize="24dp" />
-
-    <TextView
-        android:id="@+id/contact_info_company"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingTop="15dp"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/contact_info_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingTop="15dp"
-        android:textSize="20dp" />
+        android:layout_height="match_parent" />
 </LinearLayout>

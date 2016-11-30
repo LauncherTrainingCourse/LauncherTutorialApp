@@ -53,6 +53,7 @@ public class ContactPageFragment extends Fragment {
         ListView listView = (ListView) view.findViewById(R.id.lv_contact);
         listView.setAdapter(contactAdapter);
 
+        // Check the current orientation mode, hold true when in landscape mode.
         if(view.findViewById(R.id.info_container) != null) {
             final FragmentActivity fragmentActivity = this.getActivity();
             final FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
