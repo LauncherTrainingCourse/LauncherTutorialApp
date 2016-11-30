@@ -86,7 +86,7 @@ public class ContactPageFragment extends Fragment {
      * Used to read json file from asset directory.
      * @return json string
      */
-    public String loadJSONFromAssets() {
+    private String loadJSONFromAssets() {
         String json = null;
         try {
             InputStream inputStream = this.getContext().getAssets().open("contacts_sample.json");
@@ -106,7 +106,7 @@ public class ContactPageFragment extends Fragment {
      * @param adapter
      * @param jsonString
      */
-    public void addContacts(ContactAdapter adapter, String jsonString){
+    private void addContacts(ContactAdapter adapter, String jsonString){
         try {
             JSONArray contacts = new JSONArray(jsonString);
             for (int i=0; i<contacts.length(); i++){
