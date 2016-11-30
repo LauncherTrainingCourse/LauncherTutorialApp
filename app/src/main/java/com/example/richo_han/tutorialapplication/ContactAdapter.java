@@ -16,7 +16,6 @@ import java.util.ArrayList;
  */
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
-    public final static String TAG = ContactAdapter.class.getSimpleName();
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     public Context context;
     public ArrayList<Contact> contacts;
@@ -38,7 +37,6 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
     public View getView(final int position, View convertView, ViewGroup parent){
         final Contact contact = getItem(position);
 
-        // What does convertView do?
         if(convertView==null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_contact, parent, false);
         }

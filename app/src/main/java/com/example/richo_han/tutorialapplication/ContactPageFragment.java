@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ContactPageFragment extends Fragment {
-    public final static String TAG = ContactPageFragment.class.getSimpleName();
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     public ContactAdapter contactAdapter;
 
@@ -30,7 +29,7 @@ public class ContactPageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        ArrayList<Contact> arrayOfContacts = new ArrayList<Contact>();
+        ArrayList<Contact> arrayOfContacts = new ArrayList<>();
         contactAdapter = new ContactAdapter(this.getContext(), arrayOfContacts);
 
         // Deal with data binding here.
