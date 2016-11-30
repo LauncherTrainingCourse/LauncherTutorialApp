@@ -72,10 +72,8 @@ public class ContactPageFragment extends Fragment {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Context context = getContext();
-                    Intent intent = new Intent(context, ContactInfoActivity.class);
-                    intent.putExtra(EXTRA_CONTACT, (Contact) adapterView.getItemAtPosition(i));
-                    context.startActivity(intent);
+                    Contact contact = (Contact) adapterView.getItemAtPosition(i);
+                    popupContactInfo(contact);
                 }
             });
         }
@@ -140,4 +138,10 @@ public class ContactPageFragment extends Fragment {
                 .commit();
     }
 
+    private void popupContactInfo(Contact contact) {
+        Context context = getContext();
+        Intent intent = new Intent(context, ContactInfoActivity.class);
+        intent.putExtra(EXTRA_CONTACT, contact);
+        context.startActivity(intent);
+    }
 }
