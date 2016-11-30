@@ -19,6 +19,7 @@
         <activity
             android:name=".ContactInfoActivity"
             android:label="Info"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:parentActivityName=".OverviewActivity"/>
     </application>
 

@@ -1,6 +1,8 @@
 package com.example.richo_han.tutorialapplication;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 public class ContactInfoActivity extends AppCompatActivity {
     public final static String TAG = ContactInfoActivity.class.getSimpleName();
     public Contact contact;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,22 +31,13 @@ public class ContactInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         contact = intent.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
 
-        ImageView ivPhoto = (ImageView) findViewById(R.id.contact_info_photo);
-        TextView tvName = (TextView) findViewById(R.id.contact_info_name);
-        TextView tvPhone = (TextView) findViewById(R.id.contact_info_phone);
-        TextView tvCompany= (TextView) findViewById(R.id.contact_info_company);
-        TextView tvEmail = (TextView) findViewById(R.id.contact_info_email);
+        ContactInfoFragment contactInfoFragment = new ContactInfoFragment();
+        contactInfoFragment.setArguments(intent.getExtras());
 
-        if("male".equals(contact.gender)) {
-            ivPhoto.setImageResource(R.drawable.steve);
-        } else {
-            ivPhoto.setImageResource(R.drawable.kristy);
-        }
-
-        tvName.setText(contact.name);
-        tvPhone.setText(contact.phone);
-        tvCompany.setText(contact.company);
-        tvEmail.setText(contact.email);
+        FragmentManager manager =  this.getSupportFragmentManager();
+        manager.beginTransaction()
+                .replace(R.id.info_container, contactInfoFragment)
+                .commit();
     }
 
     @Override
@@ -70,6 +64,15 @@ public class ContactInfoActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            onBackPressed();
         }
     }
 }

@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class GroupPageFragment extends Fragment {
-    public static final String ARG_PAGE = "ARG_PAGE";
 
     @Override
     public void onCreate(Bundle savedInstanceState){
