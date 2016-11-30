@@ -57,6 +57,7 @@ public class ContactPageFragment extends Fragment {
             final FragmentActivity fragmentActivity = this.getActivity();
             final FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
 
+            // Will have duplicate fragment if not wrapped in the if statement
             if(fragmentManager.findFragmentById(R.id.info_container) == null) {
                 showContactInfo(fragmentActivity, fragmentManager, contactAdapter.getItem(0));
             }
@@ -64,7 +65,7 @@ public class ContactPageFragment extends Fragment {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    switchContactInfo(fragmentActivity, fragmentManager, (Contact) adapterView.getItemAtPosition(i));
+                    showContactInfo(fragmentActivity, fragmentManager, (Contact) adapterView.getItemAtPosition(i));
                 }
             });
         } else {
@@ -123,7 +124,7 @@ public class ContactPageFragment extends Fragment {
     }
 
     /**
-     * Add contact info to the FrameLayout.
+     * Add contact info to the FrameLayout or replace with existing one.
      * @param activity
      * @param manager
      * @param contact
@@ -133,22 +134,7 @@ public class ContactPageFragment extends Fragment {
         activity.getIntent().putExtra(EXTRA_CONTACT, contact);
         contactInfoFragment.setArguments(activity.getIntent().getExtras());
 
-        manager.beginTransaction()
-                .add(R.id.info_container, contactInfoFragment)
-                .commit();
-    }
-
-    /**
-     * Replace contact info with the existing one in the FrameLayout.
-     * @param activity
-     * @param manager
-     * @param contact
-     */
-    private void switchContactInfo(FragmentActivity activity, FragmentManager manager, Contact contact){
-        ContactInfoFragment contactInfoFragment = new ContactInfoFragment();
-        activity.getIntent().putExtra(EXTRA_CONTACT, contact);
-        contactInfoFragment.setArguments(activity.getIntent().getExtras());
-
+        // replace() == .remove().add(), so the function will work given no existing fragment.
         manager.beginTransaction()
                 .replace(R.id.info_container, contactInfoFragment)
                 .commit();
