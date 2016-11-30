@@ -33,23 +33,9 @@ public class ContactPageFragment extends Fragment {
         ArrayList<Contact> arrayOfContacts = new ArrayList<Contact>();
         contactAdapter = new ContactAdapter(this.getContext(), arrayOfContacts);
 
-        /*
-        Deal with data binding here.
-        Read json file from asset and create Contact instances for simulation.
-         */
-        try {
-            JSONArray contacts = new JSONArray(loadJSONFromAssets());
-            for (int i=0; i<contacts.length(); i++){
-                JSONObject contact = contacts.getJSONObject(i);
-                contactAdapter.add(new Contact(contact.getString("name"),
-                        contact.getString("phone"),
-                        contact.getString("gender"),
-                        contact.getString("company"),
-                        contact.getString("email")));
-            }
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
+        // Deal with data binding here.
+        // Read json file from asset and create Contact instances for simulation.
+        addContacts(contactAdapter, loadJSONFromAssets());
     }
 
     /***
@@ -113,6 +99,27 @@ public class ContactPageFragment extends Fragment {
             e.printStackTrace();
         }
         return json;
+    }
+
+    /**
+     * Add each contact extracted from json string along with his/her detailed info to the input adapter.
+     * @param adapter
+     * @param jsonString
+     */
+    public void addContacts(ContactAdapter adapter, String jsonString){
+        try {
+            JSONArray contacts = new JSONArray(jsonString);
+            for (int i=0; i<contacts.length(); i++){
+                JSONObject contact = contacts.getJSONObject(i);
+                adapter.add(new Contact(contact.getString("name"),
+                        contact.getString("phone"),
+                        contact.getString("gender"),
+                        contact.getString("company"),
+                        contact.getString("email")));
+            }
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     /**
