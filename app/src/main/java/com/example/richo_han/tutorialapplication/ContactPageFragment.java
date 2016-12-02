@@ -1,8 +1,11 @@
 package com.example.richo_han.tutorialapplication;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 public class ContactPageFragment extends Fragment {
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     public ContactAdapter contactAdapter;
+    ContactReaderDbHelper mDbHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -34,7 +38,9 @@ public class ContactPageFragment extends Fragment {
 
         // Deal with data binding here.
         // Read json file from asset and create Contact instances for simulation.
-        addContacts(contactAdapter, loadJSONFromAssets());
+        mDbHelper = new ContactReaderDbHelper(getContext());
+        initiateDb(mDbHelper);
+        addContactsToList(findContactsFromDb(mDbHelper), contactAdapter);
     }
 
     /***
@@ -81,6 +87,15 @@ public class ContactPageFragment extends Fragment {
         return view;
     }
 
+    private void initiateDb(ContactReaderDbHelper dbHelper) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor mCursor = db.rawQuery("SELECT * FROM " + ContactReaderContract.ContactEntry.TABLE_NAME, null);
+        if (!mCursor.moveToFirst()) {
+            addContacts(mDbHelper, contactAdapter, loadJSONFromAssets());
+        }
+        findContactsFromDb(mDbHelper);
+    }
+
     /***
      * Used to read json file from asset directory.
      * @return json string
@@ -105,19 +120,84 @@ public class ContactPageFragment extends Fragment {
      * @param adapter
      * @param jsonString
      */
-    private void addContacts(ContactAdapter adapter, String jsonString){
+    private void addContacts(ContactReaderDbHelper dbHelper, ContactAdapter adapter, String jsonString) {
         try {
             JSONArray contacts = new JSONArray(jsonString);
             for (int i=0; i<contacts.length(); i++){
                 JSONObject contact = contacts.getJSONObject(i);
-                adapter.add(new Contact(contact.getString("name"),
-                        contact.getString("phone"),
-                        contact.getString("gender"),
-                        contact.getString("company"),
-                        contact.getString("email")));
+                addContactToDb(dbHelper, contact);
             }
         } catch (JSONException e){
             e.printStackTrace();
+        }
+    }
+
+    private void addContactToDb(ContactReaderDbHelper dbHelper, JSONObject contact) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        try {
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME, contact.getString("name"));
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE, contact.getString("phone"));
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER, contact.getString("gender"));
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY, contact.getString("company"));
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL, contact.getString("email"));
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        long newRowId;
+        newRowId = db.insert(
+                ContactReaderContract.ContactEntry.TABLE_NAME,
+                null,
+                values);
+    }
+
+    private Cursor findContactsFromDb(ContactReaderDbHelper dbHelper) {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String[] projection = {
+                ContactReaderContract.ContactEntry.COLUMN_NAME_NAME,
+                ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE,
+                ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER,
+                ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY,
+                ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL
+        };
+        String sortOrder =
+                ContactReaderContract.ContactEntry.COLUMN_NAME_NAME + " DESC";
+
+        Cursor cursor = db.query(
+                ContactReaderContract.ContactEntry.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                sortOrder
+        );
+
+        return cursor;
+    }
+
+    private void addContactsToList(Cursor cursor, ContactAdapter adapter) {
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false) {
+            adapter.add(new Contact(
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME)
+                    ),
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE)
+                    ),
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER)
+                    ),
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY)
+                    ),
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL)
+                    )));
+            cursor.moveToNext();
         }
     }
 
