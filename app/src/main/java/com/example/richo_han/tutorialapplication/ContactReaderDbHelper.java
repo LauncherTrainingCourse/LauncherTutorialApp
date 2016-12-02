@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class ContactReaderDbHelper extends SQLiteOpenHelper{
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "ContactReader.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -17,8 +17,11 @@ public class ContactReaderDbHelper extends SQLiteOpenHelper{
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ContactReaderContract.ContactEntry.TABLE_NAME + " (" +
                     ContactReaderContract.ContactEntry._ID + " INTEGER PRIMARY KEY," +
-                    ContactReaderContract.ContactEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
-                    ContactReaderContract.ContactEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
+                    ContactReaderContract.ContactEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
+                    ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE+ TEXT_TYPE + COMMA_SEP +
+                    ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER + TEXT_TYPE + COMMA_SEP +
+                    ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY + TEXT_TYPE + COMMA_SEP +
+                    ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL + TEXT_TYPE +
             " )";
 
     private static final String SQL_DELETE_ENTRIES =
