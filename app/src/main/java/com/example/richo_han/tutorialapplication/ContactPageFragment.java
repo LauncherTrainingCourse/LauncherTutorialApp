@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -55,7 +54,7 @@ public class ContactPageFragment extends Fragment {
      * @return the View instance containing ListVIew instance.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_page, container, false);
 
@@ -91,7 +90,7 @@ public class ContactPageFragment extends Fragment {
         FloatingActionButton button = (FloatingActionButton) view.findViewById(R.id.add_button);
         button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                newContact();
+                newContact(mDbHelper, contactAdapter);
             }
         });
 
@@ -148,8 +147,11 @@ public class ContactPageFragment extends Fragment {
         return json;
     }
 
-    private void newContact(){
+    private void newContact(ContactReaderDbHelper helper, ContactAdapter adapter){
         Log.d("TAG", "newContact()");
+        Contact contact = new Contact("Richo Han", "+1 (000) 000-0000", "male", "ASUS", "Richo_Han@asus.com");
+        addContactToDb(contact, helper);
+        addContactToList(contact, adapter);
     }
 
     /**
