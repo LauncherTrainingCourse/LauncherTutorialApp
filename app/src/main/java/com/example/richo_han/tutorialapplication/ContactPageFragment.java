@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+
 public class ContactPageFragment extends Fragment {
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     public ContactAdapter contactAdapter;
@@ -59,7 +61,7 @@ public class ContactPageFragment extends Fragment {
         listView.setAdapter(contactAdapter);
 
         // Check the current orientation mode, hold true when in landscape mode.
-        if(view.findViewById(R.id.info_container) != null) {
+        if(getActivity().getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
             final FragmentActivity fragmentActivity = this.getActivity();
             final FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
 
