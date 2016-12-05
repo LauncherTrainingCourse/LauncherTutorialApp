@@ -44,8 +44,7 @@ public class ContactPageFragment extends Fragment {
         // Deal with data binding here.
         // Read json file from asset and create Contact instances for simulation.
         mDbHelper = new ContactReaderDbHelper(getContext());
-        initiateDb(mDbHelper);
-        addContactsToList(findContactsFromDb(mDbHelper), contactAdapter);
+        refreshContactList(mDbHelper, contactAdapter);
     }
 
     /***
@@ -99,13 +98,35 @@ public class ContactPageFragment extends Fragment {
         return view;
     }
 
-    private void initiateDb(ContactReaderDbHelper dbHelper) {
+    private void refreshContactList(ContactReaderDbHelper dbHelper, ContactAdapter adapter) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor mCursor = db.rawQuery("SELECT * FROM " + ContactReaderContract.ContactEntry.TABLE_NAME, null);
         if (!mCursor.moveToFirst()) {
-            addContacts(mDbHelper, contactAdapter, loadJSONFromAssets());
+            initiateDb(mDbHelper, contactAdapter, loadJSONFromAssets());
+        } else {
+            Cursor cursor = findContactsFromDb(mDbHelper);
+            cursor.moveToFirst();
+            while (cursor.isAfterLast() == false) {
+                Contact contact = new Contact(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME)
+                        ),
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE)
+                        ),
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER)
+                        ),
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY)
+                        ),
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL)
+                        ));
+                addContactToList(contact, adapter);
+                cursor.moveToNext();
+            }
         }
-        findContactsFromDb(mDbHelper);
     }
 
     /***
@@ -136,34 +157,35 @@ public class ContactPageFragment extends Fragment {
      * @param adapter
      * @param jsonString
      */
-    private void addContacts(ContactReaderDbHelper dbHelper, ContactAdapter adapter, String jsonString) {
+    private void initiateDb(ContactReaderDbHelper dbHelper, ContactAdapter adapter, String jsonString) {
         try {
             JSONArray contacts = new JSONArray(jsonString);
             for (int i=0; i<contacts.length(); i++){
-                JSONObject contact = contacts.getJSONObject(i);
-                addContactToDb(dbHelper, contact);
+                JSONObject object = contacts.getJSONObject(i);
+                Contact contact = new Contact(object.getString("name"),
+                        object.getString("phone"),
+                        object.getString("gender"),
+                        object.getString("company"),
+                        object.getString("email"));
+                addContactToDb(contact, dbHelper);
+                addContactToList(contact, adapter);
             }
         } catch (JSONException e){
             e.printStackTrace();
         }
     }
 
-    private void addContactToDb(ContactReaderDbHelper dbHelper, JSONObject contact) {
+    private void addContactToDb(Contact contact, ContactReaderDbHelper dbHelper) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        try {
-            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME, contact.getString("name"));
-            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE, contact.getString("phone"));
-            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER, contact.getString("gender"));
-            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY, contact.getString("company"));
-            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL, contact.getString("email"));
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
+        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME, contact.name);
+        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE, contact.phone);
+        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER, contact.gender);
+        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY, contact.company);
+        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL, contact.email);
 
-        long newRowId;
-        newRowId = db.insert(
+        db.insert(
                 ContactReaderContract.ContactEntry.TABLE_NAME,
                 null,
                 values);
@@ -194,27 +216,8 @@ public class ContactPageFragment extends Fragment {
         return cursor;
     }
 
-    private void addContactsToList(Cursor cursor, ContactAdapter adapter) {
-        cursor.moveToFirst();
-        while (cursor.isAfterLast() == false) {
-            adapter.add(new Contact(
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME)
-                    ),
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE)
-                    ),
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER)
-                    ),
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY)
-                    ),
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL)
-                    )));
-            cursor.moveToNext();
-        }
+    private void addContactToList(Contact contact, ContactAdapter adapter) {
+        adapter.add(contact);
     }
 
     /**
