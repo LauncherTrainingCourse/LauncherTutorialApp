@@ -7,13 +7,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -86,6 +89,13 @@ public class ContactPageFragment extends Fragment {
             });
         }
 
+        FloatingActionButton button = (FloatingActionButton) view.findViewById(R.id.add_button);
+        button.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                newContact();
+            }
+        });
+
         return view;
     }
 
@@ -115,6 +125,10 @@ public class ContactPageFragment extends Fragment {
             e.printStackTrace();
         }
         return json;
+    }
+
+    private void newContact(){
+        Log.d("TAG", "newContact()");
     }
 
     /**
