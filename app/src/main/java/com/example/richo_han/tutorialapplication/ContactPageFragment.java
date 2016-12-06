@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -105,28 +106,7 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         if (!mCursor.moveToFirst()) {
             initiateDb(mDbHelper, contactAdapter, loadJSONFromAssets());
         } else {
-            Cursor cursor = findContactsFromDb(mDbHelper);
-            cursor.moveToFirst();
-            while (cursor.isAfterLast() == false) {
-                Contact contact = new Contact(
-                        cursor.getString(
-                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME)
-                        ),
-                        cursor.getString(
-                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE)
-                        ),
-                        cursor.getString(
-                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER)
-                        ),
-                        cursor.getString(
-                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY)
-                        ),
-                        cursor.getString(
-                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL)
-                        ));
-                addContactToList(contact, adapter);
-                cursor.moveToNext();
-            }
+            getLoaderManager().initLoader(0, null, this);
         }
     }
 
@@ -195,31 +175,6 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
                 values);
     }
 
-    private Cursor findContactsFromDb(ContactReaderDbHelper dbHelper) {
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        String[] projection = {
-                ContactReaderContract.ContactEntry.COLUMN_NAME_NAME,
-                ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE,
-                ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER,
-                ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY,
-                ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL
-        };
-        String sortOrder =
-                ContactReaderContract.ContactEntry.COLUMN_NAME_NAME + " DESC";
-
-        Cursor cursor = db.query(
-                ContactReaderContract.ContactEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder
-        );
-
-        return cursor;
-    }
-
     private void addContactToList(Contact contact, ContactAdapter adapter) {
         adapter.add(contact);
     }
@@ -250,16 +205,52 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+        String[] projection = {
+                ContactReaderContract.ContactEntry.COLUMN_NAME_NAME,
+                ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE,
+                ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER,
+                ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY,
+                ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL
+        };
+        String sortOrder =
+                ContactReaderContract.ContactEntry.COLUMN_NAME_NAME + " ASC";
+
+        String select = "";
+        return new CursorLoader(getActivity(), null, projection, select, null, sortOrder) {
+            @Override
+            public Cursor loadInBackground() {
+                // You better know how to get your database.
+                SQLiteDatabase db = mDbHelper.getReadableDatabase();
+                return db.query(ContactReaderContract.ContactEntry.TABLE_NAME, getProjection(), getSelection(), getSelectionArgs(), null, null, getSortOrder(), null );
+            }
+        };
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false) {
+            Contact contact = new Contact(
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME)
+                    ),
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE)
+                    ),
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER)
+                    ),
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY)
+                    ),
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL)
+                    ));
+            addContactToList(contact, contactAdapter);
+            cursor.moveToNext();
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
+    public void onLoaderReset(Loader<Cursor> loader) {}
 }
