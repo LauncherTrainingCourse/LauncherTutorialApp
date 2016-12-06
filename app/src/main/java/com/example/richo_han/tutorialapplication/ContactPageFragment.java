@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
@@ -159,20 +161,11 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         }
     }
 
-    private void addContactToDb(Contact contact, ContactReaderDbHelper dbHelper) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME, contact.name);
-        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE, contact.phone);
-        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER, contact.gender);
-        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY, contact.company);
-        values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL, contact.email);
-
-        db.insert(
-                ContactReaderContract.ContactEntry.TABLE_NAME,
-                null,
-                values);
+    private void addContactToDb(Contact contact, ContactReaderDbHelper helper) {
+        AsyncInsertTask insertTask = new AsyncInsertTask();
+        insertTask.contact = contact;
+        insertTask.helper = helper;
+        insertTask.execute();
     }
 
     private void addContactToList(Contact contact, ContactAdapter adapter) {
@@ -253,4 +246,27 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {}
+
+    private class AsyncInsertTask extends AsyncTask<Void, Void, Void> {
+        Contact contact;
+        ContactReaderDbHelper helper;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            SQLiteDatabase db = helper.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME, contact.name);
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE, contact.phone);
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER, contact.gender);
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY, contact.company);
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL, contact.email);
+
+            db.insert(
+                    ContactReaderContract.ContactEntry.TABLE_NAME,
+                    null,
+                    values);
+            return null;
+        }
+    }
 }
