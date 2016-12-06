@@ -11,6 +11,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
-public class ContactPageFragment extends Fragment {
+public class ContactPageFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     public ContactAdapter contactAdapter;
     ContactReaderDbHelper mDbHelper;
@@ -244,5 +246,20 @@ public class ContactPageFragment extends Fragment {
         Intent intent = new Intent(context, ContactInfoActivity.class);
         intent.putExtra(EXTRA_CONTACT, contact);
         context.startActivity(intent);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
