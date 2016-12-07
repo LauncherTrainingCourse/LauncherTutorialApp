@@ -108,16 +108,18 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         if(requestCode == SHOW_CONTACT_REQUEST) {
             if(resultCode == RESULT_OK) {
                 Contact contact = data.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
+                removeContactFromDb(contact, mDbHelper);
                 Log.d("TAG", "Getting result back from ContactInfoActivity: " + contact.name);
             }
         }
     }
 
     private void refreshContactList(ContactReaderDbHelper dbHelper) {
+        contactAdapter.clear();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor mCursor = db.rawQuery("SELECT * FROM " + ContactReaderContract.ContactEntry.TABLE_NAME, null);
         if (!mCursor.moveToFirst()) {
-            initiateDb(mDbHelper, contactAdapter, loadJSONFromAssets());
+            initiateDb(mDbHelper, loadJSONFromAssets());
         } else {
             getLoaderManager().initLoader(0, null, this);
         }
@@ -146,15 +148,15 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         Log.d("TAG", "newContact()");
         Contact contact = new Contact("Richo Han", "+1 (000) 000-0000", "male", "ASUS", "Richo_Han@asus.com");
         addContactToDb(contact, helper);
-        addContactToList(contact, adapter);
+        addContactToList(contact);
     }
 
     /**
-     * Add each contact extracted from json string along with his/her detailed info to the input adapter.
-     * @param adapter
+     *
+     * @param dbHelper
      * @param jsonString
      */
-    private void initiateDb(ContactReaderDbHelper dbHelper, ContactAdapter adapter, String jsonString) {
+    private void initiateDb(ContactReaderDbHelper dbHelper, String jsonString) {
         try {
             JSONArray contacts = new JSONArray(jsonString);
             for (int i=0; i<contacts.length(); i++){
@@ -165,7 +167,7 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
                         object.getString("company"),
                         object.getString("email"));
                 addContactToDb(contact, dbHelper);
-                addContactToList(contact, adapter);
+                addContactToList(contact);
             }
         } catch (JSONException e){
             e.printStackTrace();
@@ -179,8 +181,16 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         insertTask.execute();
     }
 
-    private void addContactToList(Contact contact, ContactAdapter adapter) {
-        adapter.add(contact);
+    private void removeContactFromDb(Contact contact, ContactReaderDbHelper helper) {
+        AsyncDeleteTask deleteTask = new AsyncDeleteTask();
+        deleteTask.contact = contact;
+        deleteTask.helper = helper;
+        deleteTask.execute();
+    }
+
+    private void addContactToList(Contact contact) {
+        contactAdapter.add(contact);
+        contactAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -250,7 +260,7 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
                     cursor.getString(
                             cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL)
                     ));
-            addContactToList(contact, contactAdapter);
+            addContactToList(contact);
             cursor.moveToNext();
         }
     }
@@ -278,6 +288,36 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
                     null,
                     values);
             return null;
+        }
+    }
+
+    private class AsyncDeleteTask extends AsyncTask<Void, Void, Void> {
+        Contact contact;
+        ContactReaderDbHelper helper;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            SQLiteDatabase db = helper.getWritableDatabase();
+
+            db.delete(
+                    ContactReaderContract.ContactEntry.TABLE_NAME,
+                    "name = ?",
+                    new String[] {contact.name}
+            );
+
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            Log.d("Tag", "Refreshing list...");
+            getActivity().runOnUiThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshContactList(mDbHelper);
+                        }
+                    }
+            );
         }
     }
 }
