@@ -49,7 +49,7 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         // Deal with data binding here.
         // Read json file from asset and create Contact instances for simulation.
         mDbHelper = new ContactReaderDbHelper(getContext());
-        refreshContactList(mDbHelper, contactAdapter);
+        refreshContactList(mDbHelper);
     }
 
     /***
