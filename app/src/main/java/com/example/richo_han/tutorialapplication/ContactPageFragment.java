@@ -115,13 +115,35 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
     }
 
     private void refreshContactList(ContactReaderDbHelper dbHelper) {
+        Log.d("Tag", contactAdapter.contacts.toString());
         contactAdapter.clear();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor mCursor = db.rawQuery("SELECT * FROM " + ContactReaderContract.ContactEntry.TABLE_NAME, null);
-        if (!mCursor.moveToFirst()) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ContactReaderContract.ContactEntry.TABLE_NAME, null);
+        if (!cursor.moveToFirst()) {
             initiateDb(mDbHelper, loadJSONFromAssets());
         } else {
-            getLoaderManager().initLoader(0, null, this);
+            //getLoaderManager().initLoader(0, null, this);
+            cursor.moveToFirst();
+            while (cursor.isAfterLast() == false) {
+                Contact contact = new Contact(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME)
+                        ),
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE)
+                        ),
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER)
+                        ),
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY)
+                        ),
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL)
+                        ));
+                addContactToList(contact);
+                cursor.moveToNext();
+            }
         }
     }
 
