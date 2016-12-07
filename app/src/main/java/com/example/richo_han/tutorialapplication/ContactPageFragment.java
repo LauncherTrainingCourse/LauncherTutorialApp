@@ -113,7 +113,7 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         }
     }
 
-    private void refreshContactList(ContactReaderDbHelper dbHelper, ContactAdapter adapter) {
+    private void refreshContactList(ContactReaderDbHelper dbHelper) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor mCursor = db.rawQuery("SELECT * FROM " + ContactReaderContract.ContactEntry.TABLE_NAME, null);
         if (!mCursor.moveToFirst()) {
