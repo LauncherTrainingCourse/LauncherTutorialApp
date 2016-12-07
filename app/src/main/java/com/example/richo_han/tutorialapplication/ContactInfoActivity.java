@@ -64,6 +64,9 @@ public class ContactInfoActivity extends AppCompatActivity {
                 return true;
             case R.id.action_delete:
                 Log.i(TAG, "Delete button pushed.");
+                Intent data = new Intent();
+                data.putExtra(ContactAdapter.EXTRA_CONTACT, contact);
+                setResult(RESULT_OK, data);
                 finish();
                 return true;
             default:

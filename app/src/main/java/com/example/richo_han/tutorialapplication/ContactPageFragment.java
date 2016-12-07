@@ -29,12 +29,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Objects;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class ContactPageFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
+    static final int SHOW_CONTACT_REQUEST = 1;
     public ContactAdapter contactAdapter;
     ContactReaderDbHelper mDbHelper;
 
@@ -100,6 +101,16 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         });
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == SHOW_CONTACT_REQUEST) {
+            if(resultCode == RESULT_OK) {
+                Contact contact = data.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
+                Log.d("TAG", "Getting result back from ContactInfoActivity: " + contact.name);
+            }
+        }
     }
 
     private void refreshContactList(ContactReaderDbHelper dbHelper, ContactAdapter adapter) {
@@ -193,7 +204,7 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         Context context = getContext();
         Intent intent = new Intent(context, ContactInfoActivity.class);
         intent.putExtra(EXTRA_CONTACT, contact);
-        context.startActivity(intent);
+        startActivityForResult(intent, SHOW_CONTACT_REQUEST);
     }
 
     @Override
