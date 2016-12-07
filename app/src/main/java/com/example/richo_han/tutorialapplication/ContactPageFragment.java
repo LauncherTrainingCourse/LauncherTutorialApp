@@ -12,10 +12,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +29,7 @@ import java.util.ArrayList;
 import static android.app.Activity.RESULT_OK;
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
-public class ContactPageFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ContactPageFragment extends Fragment {
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     static final int SHOW_CONTACT_REQUEST = 1;
     public ContactAdapter contactAdapter;
@@ -96,7 +92,7 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         FloatingActionButton button = (FloatingActionButton) view.findViewById(R.id.add_button);
         button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                newContact(mDbHelper, contactAdapter);
+                newContact(mDbHelper);
             }
         });
 
@@ -109,13 +105,11 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
             if(resultCode == RESULT_OK) {
                 Contact contact = data.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
                 removeContactFromDb(contact, mDbHelper);
-                Log.d("TAG", "Getting result back from ContactInfoActivity: " + contact.name);
             }
         }
     }
 
     private void refreshContactList(ContactReaderDbHelper dbHelper) {
-        Log.d("Tag", contactAdapter.contacts.toString());
         contactAdapter.clear();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + ContactReaderContract.ContactEntry.TABLE_NAME, null);
@@ -166,8 +160,7 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         return json;
     }
 
-    private void newContact(ContactReaderDbHelper helper, ContactAdapter adapter){
-        Log.d("TAG", "newContact()");
+    private void newContact(ContactReaderDbHelper helper){
         Contact contact = new Contact("Richo Han", "+1 (000) 000-0000", "male", "ASUS", "Richo_Han@asus.com");
         addContactToDb(contact, helper);
         addContactToList(contact);
@@ -239,57 +232,6 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         startActivityForResult(intent, SHOW_CONTACT_REQUEST);
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = {
-                ContactReaderContract.ContactEntry.COLUMN_NAME_NAME,
-                ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE,
-                ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER,
-                ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY,
-                ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL
-        };
-        String sortOrder =
-                ContactReaderContract.ContactEntry.COLUMN_NAME_NAME + " ASC";
-
-        String select = "";
-        return new CursorLoader(getActivity(), null, projection, select, null, sortOrder) {
-            @Override
-            public Cursor loadInBackground() {
-                // You better know how to get your database.
-                SQLiteDatabase db = mDbHelper.getReadableDatabase();
-                return db.query(ContactReaderContract.ContactEntry.TABLE_NAME, getProjection(), getSelection(), getSelectionArgs(), null, null, getSortOrder(), null );
-            }
-        };
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        cursor.moveToFirst();
-        while (cursor.isAfterLast() == false) {
-            Contact contact = new Contact(
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME)
-                    ),
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE)
-                    ),
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER)
-                    ),
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY)
-                    ),
-                    cursor.getString(
-                            cursor.getColumnIndexOrThrow(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL)
-                    ));
-            addContactToList(contact);
-            cursor.moveToNext();
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {}
-
     private class AsyncInsertTask extends AsyncTask<Void, Void, Void> {
         Contact contact;
         ContactReaderDbHelper helper;
@@ -331,7 +273,6 @@ public class ContactPageFragment extends Fragment implements LoaderManager.Loade
         }
 
         protected void onPostExecute(Void result) {
-            Log.d("Tag", "Refreshing list...");
             getActivity().runOnUiThread(
                     new Runnable() {
                         @Override
