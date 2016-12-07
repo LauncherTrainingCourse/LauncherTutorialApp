@@ -62,6 +62,10 @@ public class ContactInfoActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Log.i(TAG, "Settings button pushed.");
                 return true;
+            case R.id.action_delete:
+                Log.i(TAG, "Delete button pushed.");
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
