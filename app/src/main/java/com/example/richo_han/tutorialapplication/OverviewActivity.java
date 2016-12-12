@@ -43,7 +43,7 @@ public class OverviewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_overview, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     /***
