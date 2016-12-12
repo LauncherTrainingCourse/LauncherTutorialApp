@@ -35,6 +35,7 @@ public class ContactPageFragment extends Fragment {
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     static final int SHOW_CONTACT_REQUEST = 1;
     static final int NEW_CONTACT_REQUEST = 2;
+    static final int RESULT_NEED_UPDATE = 3;
     public ContactAdapter contactAdapter;
     ContactReaderDbHelper mDbHelper;
 
@@ -108,6 +109,14 @@ public class ContactPageFragment extends Fragment {
             if(resultCode == RESULT_OK) {
                 Contact contact = data.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
                 removeContactFromDb(contact, mDbHelper);
+            } else if (resultCode == RESULT_NEED_UPDATE) {
+                Contact contact = data.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
+                Contact originalContact = data.getParcelableExtra(ContactInfoActivity.ORIGINAL_CONTACT);
+                AsyncUpdateTask updateTask = new AsyncUpdateTask();
+                updateTask.originalContact = originalContact;
+                updateTask.contact = contact;
+                updateTask.helper = this.mDbHelper;
+                updateTask.execute();
             }
         } else if(requestCode == NEW_CONTACT_REQUEST){
             Contact contact = data.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
@@ -279,6 +288,43 @@ public class ContactPageFragment extends Fragment {
                     ContactReaderContract.ContactEntry.TABLE_NAME,
                     "name = ?",
                     new String[] {contact.name}
+            );
+
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            getActivity().runOnUiThread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshContactList(mDbHelper);
+                        }
+                    }
+            );
+        }
+    }
+
+    private class AsyncUpdateTask extends AsyncTask<Void, Void, Void> {
+        Contact contact, originalContact;
+        ContactReaderDbHelper helper;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            SQLiteDatabase db = helper.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_NAME, contact.name);
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_PHONE, contact.phone);
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_GENDER, contact.gender);
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_COMPANY, contact.company);
+            values.put(ContactReaderContract.ContactEntry.COLUMN_NAME_EMAIL, contact.email);
+
+            db.update(
+                    ContactReaderContract.ContactEntry.TABLE_NAME,
+                    values,
+                    "name = ?",
+                    new String[] {originalContact.name}
             );
 
             return null;
