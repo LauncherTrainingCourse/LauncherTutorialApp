@@ -12,6 +12,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 public class ContactPageFragment extends Fragment {
     public final static String EXTRA_CONTACT = "com.example.richo_han.tutorialapplication.EXTRA_CONTACT";
     static final int SHOW_CONTACT_REQUEST = 1;
+    static final int NEW_CONTACT_REQUEST = 2;
     public ContactAdapter contactAdapter;
     ContactReaderDbHelper mDbHelper;
 
@@ -106,6 +109,10 @@ public class ContactPageFragment extends Fragment {
                 Contact contact = data.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
                 removeContactFromDb(contact, mDbHelper);
             }
+        } else if(requestCode == NEW_CONTACT_REQUEST){
+            Contact contact = data.getParcelableExtra(ContactAdapter.EXTRA_CONTACT);
+            addContactToDb(contact, this.mDbHelper);
+            addContactToList(contact);
         }
     }
 
@@ -161,9 +168,14 @@ public class ContactPageFragment extends Fragment {
     }
 
     private void newContact(ContactReaderDbHelper helper){
-        Contact contact = new Contact("Richo Han", "+1 (000) 000-0000", "male", "ASUS", "Richo_Han@asus.com");
-        addContactToDb(contact, helper);
-        addContactToList(contact);
+        FragmentManager fragmentManager = getFragmentManager();
+        NewContactFragment fragment = new NewContactFragment();
+
+        fragment.setTargetFragment(this, NEW_CONTACT_REQUEST);
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(android.R.id.content, fragment).addToBackStack(null).commit();
     }
 
     /**
