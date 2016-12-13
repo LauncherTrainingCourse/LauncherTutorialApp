@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.facebook.stetho.Stetho;
+
 public class OverviewActivity extends AppCompatActivity {
 
     public final static String TAG = OverviewActivity.class.getSimpleName();
@@ -18,6 +20,7 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
+        Stetho.initializeWithDefaults(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.overview_toolbar);
         setSupportActionBar(toolbar);
@@ -40,7 +43,7 @@ public class OverviewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_overview, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     /***

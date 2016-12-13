@@ -1,14 +1,15 @@
-# Week 3 - Fragment
+# Week 4 - Content Provider
 ### Description
-Responsive UI implemented for week 3 practice.  
+Complete practice of using database operations.
 
 #### Feature checklist  
-:heavy_check_mark: Customized UI for portrait(default) mode and landscape mode.
+:heavy_check_mark: Insert  
+:heavy_check_mark: Delete  
+:heavy_check_mark: Update
 
 ### Screenshots
-#### Portrait Mode
-![Contact List](http://i.imgur.com/aRBrmiR.jpg)
-![Contact Info](http://i.imgur.com/0kjZzU0.jpg)
+![Db checking using Stetho](http://i.imgur.com/v0yZcax.png)
+![](http://i.imgur.com/GIm6b0Y.png)
 
-#### Portrait Mode
-![Responsive UI using fragments](http://i.imgur.com/hchxGu7.jpg)
+### References
++ [Stetho](http://facebook.github.io/stetho)
