@@ -14,7 +14,9 @@ public class ShareActivity extends Activity {
 
         Intent intent = getIntent();
         String title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+        String link = intent.getStringExtra(Intent.EXTRA_TEXT);
 
         ((TextView) (findViewById(R.id.news_title))).setText(title);
+        ((TextView) (findViewById(R.id.news_link))).setText(link);
     }
 }
