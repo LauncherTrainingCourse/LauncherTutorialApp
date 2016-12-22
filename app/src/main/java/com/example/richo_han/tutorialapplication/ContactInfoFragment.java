@@ -56,15 +56,13 @@ public class ContactInfoFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.edit_fab:
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("text/plain");
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Title");
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Text");
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 
-                    String title = "Title";
-
-                    if(shareIntent.resolveActivity(getActivity().getPackageManager()) != null){
-                        startActivity(Intent.createChooser(shareIntent, title));
+                    if(intent.resolveActivity(getActivity().getPackageManager()) != null){
+                        startActivity(Intent.createChooser(intent, "Title"));
                     }
                     break;
                 default:
