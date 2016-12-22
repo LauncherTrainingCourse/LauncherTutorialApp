@@ -1,52 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <LinearLayout
-        android:id="@+id/activity_contact_info"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/contact_info_photo"
+        <LinearLayout
+            android:id="@+id/activity_contact_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitStart" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/contact_info_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingTop="15dp"
-            android:textColor="@color/contactName"
-            android:textSize="30dp" />
+            <ImageView
+                android:id="@+id/contact_info_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart" />
 
-        <TextView
-            android:id="@+id/contact_info_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingTop="15dp"
-            android:textSize="24dp" />
+            <TextView
+                android:id="@+id/contact_info_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingTop="15dp"
+                android:textColor="@color/contactName"
+                android:textSize="30dp" />
 
-        <TextView
-            android:id="@+id/contact_info_company"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingTop="15dp"
-            android:textSize="20dp" />
+            <TextView
+                android:id="@+id/contact_info_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingTop="15dp"
+                android:textSize="24dp" />
 
-        <TextView
-            android:id="@+id/contact_info_email"
-            android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/contact_info_company"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingTop="15dp"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/contact_info_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingTop="15dp"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/edit_fab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingTop="15dp"
-            android:textSize="20dp" />
-    </LinearLayout>
+            android:layout_gravity="top|right"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/ic_mode_edit_white_24px"
+            app:fab_size="mini"
+            app:fab_colorNormal="#34DADA"
+            app:fab_colorPressed="#41E6E6"
+            app:fab_colorRipple="#99FFFFFF" />
+    </FrameLayout>
 </ScrollView>
