@@ -12,6 +12,7 @@
     <string name="news_title">Title</string>
     <string name="news_link">http://social.techcrunch.com/2016/12/14/uber-ordered-to-stop-self-driving-vehicle-service-in-san-francisco</string>
 
+    <string name="permissions_not_granted">To let the app works, allow customized permission.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -2,8 +2,15 @@ package com.example.richo_han.tutorialapplication;
 
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
+import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +21,8 @@ import com.github.clans.fab.FloatingActionButton;
 
 
 public class ContactInfoFragment extends Fragment {
+    private static final String TAG = ContactInfoFragment.class.getName();
+    private static final int MY_PERMISSIONS_TEST_RUN = 1;
     public Contact contact;
 
     public ContactInfoFragment() {
@@ -51,16 +60,48 @@ public class ContactInfoFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_TEST_RUN:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Log.i(TAG, "Customized permission was granted!");
+                    sendIntent();
+                } else {
+
+                    Log.i(TAG, "Customized permission was NOT granted.");
+                    showDeniedSnackBar();
+                }
+                return;
+        }
+    }
+
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.edit_fab:
-                    Intent shareIntent = new Intent(Intent.ACTION_RUN);
-                    shareIntent.setType("text/plain");
+                    if(ContextCompat.checkSelfPermission(getActivity(),
+                            "com.example.richo.permissionpractice.permission.IMAGE_PROVIDER_ACTIVITY")
+                            != PackageManager.PERMISSION_GRANTED) {
 
-                    if(shareIntent.resolveActivity(getActivity().getPackageManager()) != null){
-                        startActivity(Intent.createChooser(shareIntent, "Title"));
+                        if (shouldShowRequestPermissionRationale("com.example.richo.permissionpractice.permission.IMAGE_PROVIDER_ACTIVITY")) {
+
+                            Log.d(TAG, "Explanation needed!");
+                            showDeniedSnackBar();
+                        } else {
+
+                            Log.d(TAG, "Requesting permission...");
+                            requestPermissions(new String[]{"com.example.richo.permissionpractice.permission.IMAGE_PROVIDER_ACTIVITY"},
+                                    MY_PERMISSIONS_TEST_RUN);
+                        }
+                    } else {
+
+                        Log.d(TAG, "Permission granted!");
+                        sendIntent();
                     }
                     break;
                 default:
@@ -68,4 +109,33 @@ public class ContactInfoFragment extends Fragment {
             }
         }
     };
+
+    private void sendIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_RUN);
+        shareIntent.setType("text/plain");
+
+        try {
+            if (shareIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(shareIntent);
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showDeniedSnackBar() {
+        Snackbar snackbar = Snackbar
+                .make(getActivity().getWindow().findViewById(android.R.id.content), R.string.permissions_not_granted, Snackbar.LENGTH_LONG)
+                .setAction("SETTINGS", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                        intent.setData(uri);
+                        startActivity(intent);
+                    }
+                });
+        snackbar.show();
+    }
 }
